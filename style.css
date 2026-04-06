@@ -1,0 +1,201 @@
+:root {
+    --bg-color: #121212;
+    --shadow-dark: #0a0a0a;
+    --shadow-light: #1e1e1e;
+    --accent-color: #00ffcc;
+    --accent-glow: rgba(0, 255, 204, 0.4);
+    --text-color: #e0e0e0;
+    --mouse-x: 50%;
+    --mouse-y: 50%;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: radial-gradient(circle at var(--mouse-x) var(--mouse-y), #1a1a1a 0%, var(--bg-color) 40%);
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    transition: background 0.1s ease-out;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3rem;
+    animation: fadeIn 1s ease-out forwards;
+}
+
+.settings {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: -1rem;
+    z-index: 20;
+}
+
+.timer-input {
+    width: 80px;
+    padding: 0.8rem;
+    background: var(--bg-color);
+    border: none;
+    border-radius: 12px;
+    color: var(--accent-color);
+    font-size: 1.2rem;
+    font-family: inherit;
+    text-align: center;
+    box-shadow: 
+        inset 5px 5px 10px var(--shadow-dark),
+        inset -5px -5px 10px var(--shadow-light);
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.timer-input:focus {
+    box-shadow: 
+        inset 8px 8px 16px var(--shadow-dark),
+        inset -8px -8px 16px var(--shadow-light);
+    color: #fff;
+}
+
+.label {
+    font-size: 0.8rem;
+    color: var(--text-color);
+    opacity: 0.6;
+    letter-spacing: 2px;
+    font-weight: 600;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.timer-container {
+    position: relative;
+    width: 320px;
+    height: 320px;
+    border-radius: 50%;
+    background: var(--bg-color);
+    box-shadow: 
+        20px 20px 60px var(--shadow-dark),
+        -20px -20px 60px var(--shadow-light),
+        inset 10px 10px 20px var(--shadow-dark),
+        inset -10px -10px 20px var(--shadow-light);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.timer-container:hover {
+    transform: scale(1.02);
+}
+
+.orbit-svg {
+    position: absolute;
+    width: 90%;
+    height: 90%;
+    transform: rotate(-90deg);
+    overflow: visible; /* Prevents clipping of filters/glows */
+}
+
+.orbit-bg {
+    fill: none;
+    stroke: var(--shadow-dark);
+    stroke-width: 2;
+    opacity: 0.5;
+}
+
+.orbit-progress {
+    fill: none;
+    stroke: var(--accent-color);
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-dasharray: 282.74;
+    stroke-dashoffset: 0;
+    transition: stroke-dashoffset 0.1s linear;
+    filter: drop-shadow(0 0 8px var(--accent-glow));
+}
+
+.timer-display {
+    font-size: 4rem;
+    font-weight: 100;
+    letter-spacing: -1px;
+    text-shadow: 0 0 20px rgba(0, 255, 204, 0.2);
+    z-index: 10;
+}
+
+.controls {
+    display: flex;
+    gap: 2rem;
+}
+
+.btn {
+    padding: 1.2rem 2.5rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    background: var(--bg-color);
+    border: none;
+    border-radius: 16px;
+    color: var(--text-color);
+    cursor: pointer;
+    box-shadow: 
+        8px 8px 16px var(--shadow-dark),
+        -8px -8px 16px var(--shadow-light);
+    transition: all 0.3s ease;
+    outline: none;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.btn:hover {
+    color: var(--accent-color);
+    box-shadow: 
+        12px 12px 24px var(--shadow-dark),
+        -12px -12px 24px var(--shadow-light);
+}
+
+.btn:active {
+    box-shadow: 
+        inset 6px 6px 12px var(--shadow-dark),
+        inset -6px -6px 12px var(--shadow-light);
+    transform: scale(0.96);
+}
+
+/* Breathing Animation */
+@keyframes breathe {
+    0%, 100% {
+        filter: drop-shadow(0 0 10px var(--accent-color));
+        stroke-width: 3;
+    }
+    50% {
+        filter: drop-shadow(0 0 25px var(--accent-color));
+        stroke-width: 4;
+    }
+}
+
+.timer-container.running .orbit-progress {
+    animation: breathe 2s ease-in-out infinite;
+}
+
+/* Success Pulse */
+@keyframes successPulse {
+    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0, 255, 204, 0.4); }
+    70% { transform: scale(1.05); box-shadow: 0 0 0 30px rgba(0, 255, 204, 0); }
+    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0, 255, 204, 0); }
+}
+
+.timer-container.finished {
+    animation: successPulse 0.8s ease-out;
+}
